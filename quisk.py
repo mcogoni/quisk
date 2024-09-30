@@ -6662,7 +6662,7 @@ class App(wx.App):
           self.file_play_state = 1
           self.SetPTT(True)
   def OnReadMIDI(self, byts):
-    for byt in byts:
+    for byt in byts[:3]:
       if byt & 0x80:		# this is a status byte and the start of a new message
         self.midi_message = [byt]
       else:

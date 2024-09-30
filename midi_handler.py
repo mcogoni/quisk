@@ -24,14 +24,15 @@ class MidiHandler:	# Quisk calls this to make the Midi handler instance.
     self.conf = conf		# The configuration settings
     self.midi_message = []	# Save Midi bytes until a whole message is received.
   def OnReadMIDI(self, byts):	# Quisk calls this for any Midi bytes received.
-    for byt in byts:
+    # print(byts)
+    for byt in byts[:3]:
       if byt & 0x80:		# this is a status byte and the start of a new message
         self.midi_message = [byt]
       else:
         self.midi_message.append(byt)
       if len(self.midi_message) == 3:
-        #print ("0x%2X%02X %d" % tuple(self.midi_message))
-        status   = self.midi_message[0]
+        # print ("0x%2X%02X %d" % tuple(self.midi_message))
+        status = self.midi_message[0]
         status = status & 0xF0	# Ignore channel
         if status == 0x90:	# Note On
           if self.midi_message[2] == 0:		# Note On with zero velocity is the same as Note Off
